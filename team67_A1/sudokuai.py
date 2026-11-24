@@ -16,9 +16,9 @@ folder can be copied to team67_A2 later without editing any imports.
 """
 
 import random
-
+import time
 import competitive_sudoku.sudokuai
-from competitive_sudoku.sudoku import GameState
+from competitive_sudoku.sudoku import GameState, Move, TabooMove, SudokuBoard
 
 from .moves import candidate_moves
 # from .evaluation import evaluate   # TODO(A1): use once evaluate() exists
@@ -31,9 +31,54 @@ class SudokuAI(competitive_sudoku.sudokuai.SudokuAI):
         super().__init__()
 
     def compute_best_move(self, game_state: GameState) -> None:
-        # Placeholder behaviour (same as naive_player): propose a random
-        # candidate move so the module always plays *something*.
-        # TODO(A1): replace with a search (e.g. minimax with alpha-beta,
-        # deepening step by step and calling propose_move after each depth).
-        moves = candidate_moves(game_state)
-        self.propose_move(random.choice(moves))
+        N = game_state.board.N
+
+        # Check whether a cell is empty, a value in that cell is not taboo, and that cell is allowed
+        def possible(i, j, value):
+            return game_state.board.get((i, j)) == SudokuBoard.empty \
+                   and not TabooMove((i, j), value) in game_state.taboo_moves \
+                       and (i, j) in game_state.player_squares()
+
+        # Check whether a an empty cell can have a value such that:
+        #   the value is not already in the region, in the row, in the column
+        def C0(i, j, value):
+            column_constraint = True
+            for k in range(game_state.board.board_width()):
+                if k != j and game_state.board.get((i, k)) == value:
+                    column_constraint = False
+
+            print("Evaluating state...")
+            print(game_state.scores)
+            row_constraint = True
+            for k in range(game_state.board.board_height()):
+                if k != i and game_state.board.get((k, j)) == value:
+                    row_constraint = False
+
+            region_constraint = True
+            region_width = game_state.board.region_width()
+            region_height = game_state.board.region_height()
+            region_i = i // region_height
+            region_j = j // region_width
+            for k in range(region_height):
+                for l in range(region_width):
+                    if (region_i * region_height + k != i and region_j * region_width + l != j) and game_state.board.get((region_i * region_height + k, region_j * region_width + l)) == value:
+                        region_constraint = False
+                        break
+                if region_constraint == False:
+                    break
+
+            return column_constraint and row_constraint and region_constraint
+
+        def state_eval(game_state: GameState):
+            print("Evaluating state...")
+            print(game_state.scores)
+            return None
+
+        all_legal_moves = [Move((i, j), value) for i in range(N) for j in range(N)
+                     for value in range(1, N+1) if possible(i, j, value) and C0(i, j, value)]
+        
+        move = random.choice(all_legal_moves)
+        self.propose_move(move)
+        while True:
+            time.sleep(0.2)
+            self.propose_move(random.choice(all_legal_moves))
