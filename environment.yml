@@ -1,0 +1,15 @@
+# Conda environment for Foundations of AI (FAINT) – competitive sudoku assignments.
+# The grading server runs Python 3.10.9, so we pin exactly that version to avoid
+# accidentally using features from newer Python releases.
+#
+# Create:  conda env create -f environment.yml
+# Update:  conda env update -f environment.yml --prune
+# Use:     conda activate faint
+name: faint
+channels:
+  - conda-forge   # community channel; avoids the Anaconda 'defaults' terms-of-service prompt
+  - nodefaults
+dependencies:
+  - python=3.10.9
+  - ipython        # lets you use `%run simulate_game.py ...` as in the assignment text
+  - pip
