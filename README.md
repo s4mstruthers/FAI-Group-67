@@ -43,8 +43,9 @@ macOS only: if `--check` fails, macOS has quarantined the solver; run
   ```
 - Open a pull request on GitHub and let someone else glance at it before merging into `main`.
 
-Rules from the course README worth remembering: Python only, single-threaded, all code and data
-files inside the team folder, and state between moves only via the provided `save`/`load`.
+Rules from the A1 assignment worth remembering: Python standard library + NumPy 1.22.3 only,
+single-threaded, all code inside the team folder, works for any region size m, n > 1, never call
+`bin/solve_sudoku` from our agent, and **no information stored between turns** (no `save`/`load` in A1).
 
 ## Submitting
 

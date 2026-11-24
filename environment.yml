@@ -11,5 +11,6 @@ channels:
   - nodefaults
 dependencies:
   - python=3.10.9
+  - numpy=1.22.3   # the only non-standard library A1 allows, pinned to the server's version
   - ipython        # lets you use `%run simulate_game.py ...` as in the assignment text
   - pip

@@ -1,0 +1,13 @@
+team67_A1 - random_player 1-0
+
+random_player - team67_A1 0-1
+
+team67_A1 - random_player 1-0
+
+random_player - team67_A1 0-1
+
+team67_A1 - random_player 1-0
+
+random_player - team67_A1 0-1
+
+Match result: team67_A1 - random_player 6-0
